@@ -1,0 +1,4 @@
+build/
+sprakbanken_normalizer.egg-info/
+test_itn.ipynb
+*.pyc

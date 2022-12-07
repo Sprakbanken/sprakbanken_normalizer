@@ -2,12 +2,6 @@ import pyparsing as pp
 from pyparsing import (
     oneOf,
     Suppress,
-    StringStart,
-    StringEnd,
-    WordStart,
-    WordEnd,
-    alphanums,
-    printables,
 )
 from .year_grammar import yearpattern
 from .number_grammar import wstart, wend
