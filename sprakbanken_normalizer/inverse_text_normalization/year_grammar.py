@@ -28,7 +28,8 @@ multfunc_no_ws = lambda t: (t[0][0] + t[1][0], t[0][1] * t[1][1])
 addfunc_no_ws = lambda t: (t[0][0] + "og" + t[1][0], t[0][1] + t[1][1])
 
 # Elements of year words not definded in number_grammar
-twenty = Literal("tjue").setParseAction(lambda t: (t[0], 20))
+twenty_new = Literal("tjue").setParseAction(lambda t: (t[0], 20))
+twenty_old = Literal("tyve").setParseAction(lambda t: (t[0], 20))
 twothousand = Literal("totusen").setParseAction(lambda t: (t[0], 2000))
 belowhundred_abovenine = compnum ^ ten ^ teens ^ tens
 
@@ -43,10 +44,10 @@ Y3 = (twothousand + CONJ_NO_WS + belowhundred).setParseAction(
 Y4 = (teens + belowhundred).setParseAction(
     lambda t: (t[0][0] + t[1][0], (t[0][1] * 100) + t[1][1])
 )  # nittensekstiåtte
-Y5 = (twenty + belowhundred_abovenine).setParseAction(
+Y5 = ((twenty_old ^ twenty_new) + belowhundred_abovenine).setParseAction(
     lambda t: (t[0][0] + t[1][0], (t[0][1] * 100) + t[1][1])
 )  # tjuetolv
-Y6 = ((teens ^ twenty) + Suppress(zero) + lownum).setParseAction(
+Y6 = ((teens ^ twenty_old ^ twenty_new) + Suppress(zero) + lownum).setParseAction(
     lambda t: (t[0][0] + "null" + t[1][0], (t[0][1] * 100) + t[1][1])
 )  # nittennullni
 yearpattern = Y1 ^ Y2 ^ Y3 ^ Y4 ^ Y5 ^ Y6 | twothousand

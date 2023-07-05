@@ -70,10 +70,11 @@ wend = WordEnd(printables + extraprintables)  # end of word
 
 # Lambda functions which give appropriate return values for complex number rules (a pair where the first element is
 # the number phrase and the second the calculation of the number phrase)
-multfunc = lambda t: (t[0][0] + " " + t[1][0], t[0][1] * t[1][1])
-addfunc = lambda t: (t[0][0] + " " + "og" + " " + t[1][0], t[0][1] + t[1][1])
-addfuncnows = lambda t: (t[0][0] + t[1][0], t[0][1] + t[1][1])
-addfuncnoconj = lambda t: (t[0][0] + " " + t[1][0], t[0][1] + t[1][1])
+multfunc = lambda t: (t[0][0] + " " + t[1][0], t[0][1] * t[1][1]) # ("femten" + " " + "tusen", 15 * 1000)
+addfunc = lambda t: (t[0][0] + " " + "og" + " " + t[1][0], t[0][1] + t[1][1]) # ("tusen" + " " + "og" + " " + "femten", 1000 + 15)
+addfuncnows = lambda t: (t[0][0] + t[1][0], t[0][1] + t[1][1]) # ("tretti" + "tre", 30 + 3)
+addfuncconjnows = lambda t: (t[0][0] + "og" + t[1][0], t[0][1] + t[1][1]) # ("tre" + "og" + "sytti")
+addfuncnoconj = lambda t: (t[0][0] + " " + t[1][0], t[0][1] + t[1][1]) # ("fem tusen" + " " "ni hundre", 5000 + 900)
 halfkfunc = lambda t: (
     t[0][0] + " " + t[1][0] + " " + t[2][0],
     (t[0][1] * t[2][1]) + t[1][1],
@@ -95,7 +96,9 @@ halfthousand = Literal("og et halvt").setParseAction(lambda t: (t[0], 500))
 thousand_single = thousand + ~FollowedBy(Literal(" takk"))
 
 lownumwten = lownum | ten
-compnum = (tens + lownum).setParseAction(addfuncnows)
+compnum_new = (tens + lownum).setParseAction(addfuncnows)
+compnum_old = (lownum + Suppress("og") + tens).setParseAction(addfuncnoconj)
+compnum = compnum_old | compnum_new
 belowhundred = compnum ^ lownumwten ^ teens ^ tens
 numword = compnum | belowhundred | hundred | thousand_single
 belowhundred_above_twelve = compnum ^ thirteentonineteen ^ tens
@@ -145,4 +148,5 @@ if __name__ == "__main__":
     print(numbergrammar_abovethirteen.searchString("vi har tjue biler"))
     print(numbergrammar.parseString("ni og et halvt tusen"))
     print(numbergrammar.searchString("tusen takk for det president"))
+    print(numbergrammar.searchString("énogsytti"))
 

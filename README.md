@@ -5,8 +5,9 @@ Python module for inverse text normalization of Norwegian ASR output.
 The module is primarily intended for internal use in Språkbanken.
 
 ## Installation
-`git clone https://github.com/Sprakbanken/sprakbanken_normalizer.git`
-`python -m pip install .`
+```git clone https://github.com/Sprakbanken/sprakbanken_normalizer.git
+
+python -m pip install .```
 
 ## How to run
 ```
