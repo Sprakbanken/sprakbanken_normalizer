@@ -35,6 +35,8 @@ oneninedict = {
     "åtte": 8,
     "ni": 9,
 }
+singledigitdict_no_accent = oneninedict.copy()
+singledigitdict_no_accent.update(dict.fromkeys(["en", "ein", "et", "ei"], 1))
 teensdict = {
     "elleve": 11,
     "tolv": 12,
@@ -82,6 +84,7 @@ halfkfunc = lambda t: (
 
 # Rules for number words
 lownum = oneOf(oneninedict.keys()).setParseAction(lambda t: (t[0], oneninedict[t[0]]))
+lownum_no_accent = oneOf(singledigitdict_no_accent.keys()).setParseAction(lambda t: (t[0], singledigitdict_no_accent[t[0]]))
 ten = Literal("ti").setParseAction(lambda t: (t[0], 10))
 teens = oneOf(teensdict.keys()).setParseAction(lambda t: (t[0], teensdict[t[0]]))
 thirteentonineteen = oneOf(abovetwelve.keys()).setParseAction(
@@ -97,8 +100,9 @@ thousand_single = thousand + ~FollowedBy(Literal(" takk"))
 
 lownumwten = lownum | ten
 compnum_new = (tens + lownum).setParseAction(addfuncnows)
+compnum_new_no_accent = (tens + lownum_no_accent).setParseAction(addfuncnows)
 compnum_old = (lownum + Suppress("og") + tens).setParseAction(addfuncnoconj)
-compnum = compnum_old | compnum_new
+compnum = compnum_old | compnum_new | compnum_new_no_accent
 belowhundred = compnum ^ lownumwten ^ teens ^ tens
 numword = compnum | belowhundred | hundred | thousand_single
 belowhundred_above_twelve = compnum ^ thirteentonineteen ^ tens
@@ -149,4 +153,5 @@ if __name__ == "__main__":
     print(numbergrammar.parseString("ni og et halvt tusen"))
     print(numbergrammar.searchString("tusen takk for det president"))
     print(numbergrammar.searchString("énogsytti"))
+    print(numbergrammar.searchString("tjueen"))
 
