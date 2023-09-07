@@ -24,6 +24,8 @@ abbrevdict = {
     "kilobyte": "kB",
     "kilometer i timen": "km/t",
     "kilowattimer": "kWh",
+    "klokka": "kl.",
+    "klokken": "kl.",
     "mellom anna": "m.a.",
     "megabyte": "MB",
     "millimeter": "mm",
@@ -130,5 +132,10 @@ if __name__ == "__main__":
     print(
         abbrevgrammar.searchString(
             "os <ee> Kartverkets tinglysning <INAUDIBLE> så tinglyses omkring én komma seks millioner dokumenter i året"
+        )
+    )
+    print(
+        abbrevgrammar.searchString(
+            "vi har ett arrangement til i kveld klokka tjueen null null"
         )
     )
